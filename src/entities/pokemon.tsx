@@ -13,7 +13,6 @@ export interface Abilities {
 
 export interface Stats {
     base_stat: number;
-    effort: number;
     stat: { name: string };
 }
 
@@ -24,4 +23,9 @@ export interface Pokemon {
     types: Types[];
     abilities: Abilities[];
     stats: Stats[];
+}
+
+export interface PokemonList {
+    name: string;
+    url: string;
 }

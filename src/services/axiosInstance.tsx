@@ -14,22 +14,7 @@ const axiosInstance = axios.create({
  * for failed requests.
  */
 axiosInstance.interceptors.response.use(
-    (response) => {
-        return {
-            data: {
-                id: response.data.id,
-                name: response.data.name,
-                sprites: response.data.sprites,
-                types: response.data.types,
-                abilities: response.data.abilities,
-                stats: response.data.stats,
-            },
-            status: response.status,
-            statusText: response.statusText,
-            headers: response.headers,
-            config: response.config
-        }
-    },
+    (response) => response,
     (error: AxiosError<any>) => {
         if (!error.response) {
             return Promise.reject("Network Error");

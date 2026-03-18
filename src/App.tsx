@@ -1,33 +1,29 @@
 import { useEffect, useState } from "react"
-import type { Pokemon } from "./entities/pokemon"
-import { fetchList } from "./services/fetchPokemon"
+import { Box, Typography } from "@mui/material";
+
+import type { PokemonList } from "./entities/pokemon"
+
+import Team from "./cards/team";
+
+import { fetchAllPokemon } from "./services/fetchPokemon"
 
 function App() {
-    const [pokemon, setPokemon] = useState<Pokemon[]>([]);
+    const [allPokemon, setAllPokemon] = useState<PokemonList[]>([]);
 
     useEffect(() => {
-        const loadPokemon = async () => {
-            const data = await fetchList(2);
-            setPokemon(data);
-        };
-        loadPokemon();
+        fetchAllPokemon(setAllPokemon);
     }, []);
 
     return (
-        <div style={{ position: "relative", display: "flex" }}>
-            {pokemon ?
-                pokemon?.map(pokemon => (
-                    <div key={pokemon.id}>
-                        {pokemon.name}
-                        {pokemon.abilities[0].ability.name}
-                        <img src={pokemon.sprites.front_default} alt={pokemon.name} height="200px" width="200px" />
-                        {pokemon.types[0].type.name}
-                        {pokemon.stats[0].stat.name}
-                        {pokemon.stats[0].base_stat}
-                    </div>
-                ))
-                : <div style={{ position: "relative", display: "flex" }}>loading...</div>}
-
+        <div style={{ display: "flex", alignItems: "center", flexDirection: "column", marginBottom: "32px" }}>
+            <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold", marginTop: "16px" }}>
+                Pokemon Team Builder
+            </Typography>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <Box sx={{ width: "70%" }}>
+                    <Team allPokemon={allPokemon} />
+                </Box>
+            </div>
         </div>
     )
 }
