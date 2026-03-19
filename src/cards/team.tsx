@@ -1,42 +1,26 @@
-import { useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 
-import type { PokemonList } from "../entities/pokemon";
+import type { Pokemon, PokemonList } from "../entities/pokemon";
 
 import PokemonDisplay from "../components/pokemonDisplay";
 
 type Props = {
     allPokemon: PokemonList[];
+    addPokemon: (index: number, pkm: Pokemon) => void;
+    removePokemon: (index: number) => void;
 }
 
-const Team: React.FC<Props> = ({ allPokemon }) => {
-    const [teamSize, setTeamSize] = useState<number>(0);
-
-    const increment = () => {
-        setTeamSize(prev => prev + 1);
-    }
-
-    const decrement = () => {
-        setTeamSize(prev => prev - 1);
-    }
-
+const Team: React.FC<Props> = ({ allPokemon, addPokemon, removePokemon }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-            <Typography sx={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                paddingTop: "8px",
-                mx: "16px",
-                justifyContent: "center",
-                display: "flex",
-            }}>
-                My Team ({teamSize}/6)
-            </Typography>
-
             <Grid container spacing={2}>
                 {Array.from({ length: 6 }, (_, index) => index + 1).map(p => (
                     <Grid key={p} size={6}>
-                        <PokemonDisplay allPokemon={allPokemon} increment={increment} decrement={decrement} />
+                        <PokemonDisplay
+                            allPokemon={allPokemon}
+                            addPokemon={(pkm: Pokemon) => addPokemon(p - 1, pkm)}
+                            removePokemon={() => removePokemon(p - 1)}
+                        />
                     </Grid>
                 ))}
             </Grid>

@@ -1,17 +1,12 @@
 import { Box, Typography } from "@mui/material";
 
-import { TypeColors } from "../entities/types";
+import { typeColor } from "../utils/typeColor";
 
 type Props = {
     type: string;
 }
 
 const TypeDisplay: React.FC<Props> = ({ type }) => {
-    const typeColor = (t: string): string => {
-        const color = TypeColors[t.toLocaleLowerCase() as keyof typeof TypeColors] ?? "eee";
-        return "#" + color;
-    };
-
     return (
         <Box
             sx={{
@@ -22,7 +17,12 @@ const TypeDisplay: React.FC<Props> = ({ type }) => {
                 display: "flex",
                 justifyContent: "center"
             }}>
-            <Typography variant="body2" sx={{ color: "#fff", textShadow: "1px 1px 2px rgba(0, 0, 0, .7)" }}>
+            <Typography
+                variant="body2"
+                sx={{
+                    color: "#fff",
+                    textShadow: "1px 1px 2px rgba(0, 0, 0, .7)"
+                }}>
                 {type.toLocaleUpperCase()}
             </Typography>
         </Box>

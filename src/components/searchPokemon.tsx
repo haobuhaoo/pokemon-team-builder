@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Autocomplete, TextField, Box, IconButton } from "@mui/material"
+import { useState } from "react";
+import { Autocomplete, TextField, Box, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import type { Pokemon, PokemonList } from "../entities/pokemon";
@@ -9,38 +9,29 @@ import { fetchByUrl } from "../services/fetchPokemon";
 type Props = {
     allPokemon: PokemonList[];
     setPokemon: React.Dispatch<React.SetStateAction<Pokemon | null>>;
-    increment: () => void;
-    decrement: () => void;
+    addPokemon: (pkm: Pokemon) => void;
+    removePokemon: () => void;
 }
 
-const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, increment, decrement }) => {
+const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, addPokemon, removePokemon }) => {
     const [inputValue, setInputValue] = useState<string>("");
     const [selectedPokemon, setSelectedPokemon] = useState<PokemonList | null>(null);
-    const hasCounted = useRef(false);
 
-    const addPokemon = (pokemon: typeof allPokemon[number]) => {
-        fetchByUrl(pokemon.url).then(fetched => {
-            if (fetched) {
-                setPokemon(fetched);
+    const handleAddPokemon = (pokemon: typeof allPokemon[number]) => {
+        fetchByUrl(pokemon.url).then(res => {
+            if (res) {
+                setPokemon(res);
                 setSelectedPokemon(pokemon);
-
-                if (!hasCounted.current) {
-                    increment();
-                    hasCounted.current = true;
-                }
+                addPokemon(res);
             }
-        })
+        });
     };
 
-    const removePokemon = () => {
-        if (hasCounted.current) {
-            decrement();
-            hasCounted.current = false;
-        }
+    const handleRemovePokemon = () => {
         setPokemon(null);
         setSelectedPokemon(null);
         setInputValue("");
-
+        removePokemon();
     };
 
     return (
@@ -56,7 +47,7 @@ const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, increment, dec
                     }}
                     onChange={(_, value) => {
                         setSelectedPokemon(value);
-                        if (value) addPokemon(value);
+                        if (value) handleAddPokemon(value);
                     }}
                     filterOptions={(options) =>
                         options.filter((opt) =>
@@ -77,7 +68,7 @@ const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, increment, dec
                 <IconButton
                     size="small"
                     sx={{ position: "absolute", top: 17, right: 0 }}
-                    onClick={() => removePokemon()}>
+                    onClick={() => handleRemovePokemon()}>
                     <DeleteIcon sx={{ borderRadius: 10 }} />
                 </IconButton>
             </Box>
