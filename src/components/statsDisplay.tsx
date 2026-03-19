@@ -21,15 +21,15 @@ const StatsDisplay: React.FC<Props> = ({ stats }) => {
     const metricsWithValues = metrics.map((label, i) => `${label}\n${combinedStats[i]}`);
 
     return (
-        <Box sx={{ width: "60%" }}>
+        <Box sx={{ width: "90%" }}>
             <RadarChart
-                height={220}
+                height={320}
                 series={[{ data: combinedStats, fillArea: true, hideMark: true }]}
                 radar={{ max: 255, metrics: metricsWithValues }}
             />
 
             <Typography variant="body1" sx={{ display: "flex", justifyContent: "center" }}>
-                Total: {total}
+                Base Stats Total: {total}
             </Typography>
         </Box>
     )

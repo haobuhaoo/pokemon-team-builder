@@ -11,7 +11,13 @@ const AbilityDisplay: React.FC<Props> = ({ ability }) => {
     const display = (ability: Abilities) => {
         count++;
         return (
-            <Typography key={count} sx={{ whiteSpace: "normal", wordBreak: "break-word", textTransform: "capitalize" }}>
+            <Typography
+                key={count}
+                sx={{
+                    whiteSpace: "normal",
+                    wordBreak: "break-word",
+                    textTransform: "capitalize"
+                }}>
                 {count + ". " + ability.ability.name + (ability.is_hidden ? " (hidden)" : "")}
             </Typography>
         )
@@ -19,7 +25,7 @@ const AbilityDisplay: React.FC<Props> = ({ ability }) => {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {ability.map(a => display(a))}
+            {ability?.map(a => display(a))}
         </Box>
     )
 }

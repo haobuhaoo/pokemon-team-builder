@@ -1,4 +1,4 @@
-import { Box, Skeleton } from "@mui/material"
+import { Box, Skeleton } from "@mui/material";
 
 const EmptyDisplay: React.FC = () => {
     return (
@@ -6,13 +6,15 @@ const EmptyDisplay: React.FC = () => {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                width: "100%",
                 marginTop: "8px",
                 paddingX: "16px",
                 paddingBottom: "12px",
-                gap: 2
+                gap: 2.5
             }}>
-            <Box sx={{ display: "flex", width: "95%", gap: 2 }}>
+
+            <Skeleton variant="rounded" width="100%" height={70} style={{ marginTop: "8px" }} />
+
+            <Box sx={{ display: "flex", width: "100%", gap: 2, justifyContent: "center" }}>
                 <Box
                     sx={{
                         display: "flex",
@@ -27,15 +29,10 @@ const EmptyDisplay: React.FC = () => {
                     <Skeleton variant="rounded" width="80%" height={40} />
                 </Box>
 
-                <Box sx={{ width: "45%" }}>
-                    <Skeleton variant="rounded" width="100%" height={250} />
-                </Box>
-
+                <Skeleton variant="rounded" width="45%" height={250} />
             </Box>
 
-            <Box sx={{ width: "100%" }}>
-                <Skeleton variant="rounded" width="93%" height={70} />
-            </Box>
+            <Skeleton variant="rounded" width="100%" height={70} />
         </Box>
     )
 }
