@@ -6,6 +6,9 @@ type Props = {
     type: string;
 }
 
+/**
+ * Renders a single type as a styled badge.
+ */
 const TypeDisplay: React.FC<Props> = ({ type }) => {
     return (
         <Box

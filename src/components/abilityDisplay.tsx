@@ -6,6 +6,9 @@ type Props = {
     ability: Abilities[];
 }
 
+/**
+ * Renders a vertical list of a Pokémon's abilities.
+ */
 const AbilityDisplay: React.FC<Props> = ({ ability }) => {
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
