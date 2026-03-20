@@ -2,6 +2,9 @@ import type { Pokemon } from "../entities/pokemon";
 
 import { capitaliseName } from "./formatter";
 
+/**
+ * Normalizes numerical counts relative to team size.
+ */
 export function normalise(records: Record<string, number>, teamSize: number): Record<string, number> {
     const result: Record<string, number> = {};
     for (const type in records) {
@@ -10,6 +13,9 @@ export function normalise(records: Record<string, number>, teamSize: number): Re
     return result;
 };
 
+/**
+ * Finds the Pokémon with the lowest value for a specific stat.
+ */
 export function findLowest(arr: Pokemon[], index: number): Pokemon[] {
     let lowest: number = Infinity;
     let pkm: Pokemon[] = [];
@@ -25,6 +31,9 @@ export function findLowest(arr: Pokemon[], index: number): Pokemon[] {
     return pkm;
 }
 
+/**
+ * Generates a suggestion string for overrepresented roles in a team.
+ */
 export function suggestion(
     rolesDist: Record<string, Pokemon[]>,
     type: string,
@@ -36,6 +45,13 @@ export function suggestion(
     return "Too much " + entity + ". Consider removing " + removeNames.join(" or ");
 }
 
+/**
+ * Generates a list of recommendations for improving a Pokémon team composition.
+ *
+ * Recommendations include:
+ * - Identifying major type weaknesses.
+ * - Highlighting underrepresented or overrepresented roles.
+ */
 export function getRec(
     statBreakdown: Record<string, number>,
     roleBreakdown: Record<string, number>,

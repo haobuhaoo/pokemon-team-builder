@@ -109,7 +109,7 @@ export const TypeChart: Record<string, Record<string, number>> = {
     },
 }
 export interface TypeAnalysis {
-    defenseScore: number;
+    defenceScore: number;
     coverageCount: number;
     weakPokemon: string[];
     resistPokemon: string[];

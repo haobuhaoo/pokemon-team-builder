@@ -1,5 +1,8 @@
 import type { Pokemon } from "../entities/pokemon";
 
+/**
+ * Determines the role distribution of a Pokémon team.
+ */
 export function calcTeamRoleDistribution(team: Pokemon[]): Record<string, Pokemon[]> {
     const result: Record<string, Pokemon[]> = {
         physicalAttacker: [],
@@ -22,6 +25,9 @@ export function calcTeamRoleDistribution(team: Pokemon[]): Record<string, Pokemo
     return result;
 }
 
+/**
+ * Converts a role distribution into a simple numeric summary.
+ */
 export function unpackRoles(rolesDist: Record<string, Pokemon[]>): Record<string, number> {
     const result: Record<string, number> = {};
     Object.entries(rolesDist).forEach(([role, array]) => result[role] = array.length);

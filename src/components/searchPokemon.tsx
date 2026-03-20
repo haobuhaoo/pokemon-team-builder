@@ -13,6 +13,9 @@ type Props = {
     removePokemon: () => void;
 }
 
+/**
+ * Renders an autocomplete search input for Pokémon selection.
+ */
 const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, addPokemon, removePokemon }) => {
     const [inputValue, setInputValue] = useState<string>("");
     const [selectedPokemon, setSelectedPokemon] = useState<PokemonList | null>(null);

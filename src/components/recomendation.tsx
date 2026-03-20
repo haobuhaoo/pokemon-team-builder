@@ -13,6 +13,9 @@ type Props = {
     rolesDist: Record<string, Pokemon[]>;
 }
 
+/**
+ * Renders a card listing recommendations for the team.
+ */
 const Recommendation: React.FC<Props> = ({ team, statistics, rolesDist }) => {
     const stats: Record<string, number> = unpackStats(statistics);
     const roles: Record<string, number> = unpackRoles(rolesDist);

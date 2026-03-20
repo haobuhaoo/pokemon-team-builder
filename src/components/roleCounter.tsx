@@ -14,6 +14,9 @@ const Role = {
     "Special Defender": "specialDefender",
 }
 
+/**
+ * Renders a card showing Pokémon role distribution.
+ */
 const RoleCounter: React.FC<Props> = ({ rolesDist }) => {
     const displayRoles = (title: string, role: string): JSX.Element => {
         return (

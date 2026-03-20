@@ -15,6 +15,9 @@ type Props = {
     removePokemon: () => void;
 }
 
+/**
+ * Manages state for the currently selected Pokémon and renders its details.
+ */
 const PokemonDisplay: React.FC<Props> = ({ allPokemon, addPokemon, removePokemon }) => {
     const [pokemon, setPokemon] = useState<Pokemon | null>(null);
 

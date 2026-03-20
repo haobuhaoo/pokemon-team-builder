@@ -8,6 +8,10 @@ type Props = {
     value: TypeAnalysis;
 }
 
+/**
+ * Displays type-specific information depending on whether the type is analyzed offensively
+ * (isStrong = true) or defensively (isStrong = false).
+ */
 const TooltipType: React.FC<Props> = ({ isStrong, type, value }) => {
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>

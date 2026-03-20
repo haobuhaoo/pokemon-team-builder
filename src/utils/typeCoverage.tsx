@@ -2,7 +2,25 @@ import type { Pokemon } from "../entities/pokemon";
 
 import { TypeChart, type TypeAnalysis } from "../entities/types";
 
-export function calcTeamTypeSplit(team: Pokemon[]) {
+/**
+ * Calculates type based defensive and offensive analysis for a `team`.
+ *
+ * For each attack type, it determines:
+ * - How many Pokemon are weak, resistant, or immune to that type.
+ * - Which Pokemon fall into each category.
+ * - A weighted defence score that combines weakness, resistant and immunity.
+ * - How many Pokemon has coverage of that type.
+ *
+ * @returns {Record<string, TypeAnalysis>}
+ * An object keyed by attack type, each containing:
+ *   - defenceScore: Weighted score of team vulnerability to this type.
+ *   - coverageCount: Number of Pokémon that can hit this type super effectively.
+ *   - weakPokemon: Pokémon weak to this type.
+ *   - resistPokemon: Pokémon resistant to this type.
+ *   - immunePokemon: Pokémon immune to this type.
+ *   - coveragePokemon: Pokémon that hit this type super effectively.
+ */
+export function calcTeamTypeSplit(team: Pokemon[]): Record<string, TypeAnalysis> {
     const scores: Record<string, TypeAnalysis> = {};
 
     for (const attackType in TypeChart) {
@@ -32,7 +50,7 @@ export function calcTeamTypeSplit(team: Pokemon[]) {
         }
 
         const W_factor = 1, R_factor = -0.5, I_factor = -1;
-        const defenseScore = weak * W_factor + resist * R_factor + immune * I_factor;
+        const defenceScore = weak * W_factor + resist * R_factor + immune * I_factor;
 
         let coverageCount = 0;
         for (const pokemon of team) {
@@ -51,7 +69,7 @@ export function calcTeamTypeSplit(team: Pokemon[]) {
         }
 
         scores[attackType.toLowerCase()] = {
-            defenseScore,
+            defenceScore,
             coverageCount,
             weakPokemon,
             resistPokemon,
@@ -63,6 +81,9 @@ export function calcTeamTypeSplit(team: Pokemon[]) {
     return scores;
 }
 
+/**
+ * Converts type analysis into a simple numeric summary.
+ */
 export function unpackStats(statistics: Record<string, TypeAnalysis>): Record<string, number> {
     const result: Record<string, number> = {};
     Object.entries(statistics).forEach(([type, value]) => result[type] = value.weakPokemon.length);

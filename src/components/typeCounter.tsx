@@ -14,6 +14,9 @@ type Props = {
     statistics: Record<string, TypeAnalysis>;
 }
 
+/**
+ * Renders a card visualizing type based statistics for a team.
+ */
 const TypeCounter: React.FC<Props> = ({ purpose, team, statistics }) => {
     const isStrong = purpose === "strong";
 
@@ -77,7 +80,7 @@ const TypeCounter: React.FC<Props> = ({ purpose, team, statistics }) => {
                                             fontWeight: "bold",
                                             color: setColor(team.length, isStrong, value)
                                         }}>
-                                        {isStrong ? value.coverageCount : value.defenseScore}
+                                        {isStrong ? value.coverageCount : value.defenceScore}
                                     </Typography>
                                 </Box>
                             </Tooltip>

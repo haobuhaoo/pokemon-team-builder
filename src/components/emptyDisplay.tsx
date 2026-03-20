@@ -1,5 +1,8 @@
 import { Box, Skeleton } from "@mui/material";
 
+/**
+ * Provides a visual placeholder.
+ */
 const EmptyDisplay: React.FC = () => {
     return (
         <Box

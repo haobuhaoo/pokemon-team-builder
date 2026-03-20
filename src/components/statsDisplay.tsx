@@ -7,8 +7,11 @@ type Props = {
     stats: Stats[];
 }
 
-const Metrics = ["HP", "Attack", "Defense", "Speed", "Sp. Def", "Sp. Atk"];
+const Metrics = ["HP", "Attack", "Defence", "Speed", "Sp. Def", "Sp. Atk"];
 
+/**
+ * Renders a radar chart of the Pokémon's base stats.
+ */
 const StatsDisplay: React.FC<Props> = ({ stats }) => {
     const firstThree = stats.slice(0, 3).map(s => s.base_stat);
     const lastThree = stats.slice(3, 6).map(s => s.base_stat).reverse();
