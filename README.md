@@ -69,16 +69,39 @@ cd pokemon-team-builder
 ```
 
 2. Install dependencies:
-`npm install`
+```bash
+npm install
+```
 
 #### **Running the App**
 To start the development server:
-`npm run dev`
+```bash
+npm run dev
+```
 This will start and open the app in your default browser at `https://localhost:5173`.
 
 ---
 
-### Testing
+### **Testing**
+Tests are located in the `test` directory and cover components, utilities, and key functionalities.
+
+#### **Run Tests**
+1. Run all tests once:
+```bash
+npm test
+```
+This executes the entire test suite and provides a summary of passed/failed tests.
+
+2. Run specific test files:
+```bash
+npm test -- <test-file-path>
+```
+For example: `npm test -- test/components/pokemonDisplay.test.tsx`
+
+#### **Test Structure**
+- `components`: Tests for React components.
+- `utils`: Tests for utility functions.
+- `mockups`: Mock data structures used in testing.
 
 ---
 
