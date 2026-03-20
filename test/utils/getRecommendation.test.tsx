@@ -1,0 +1,79 @@
+import type { Pokemon } from "../../src/entities/pokemon";
+
+import { findLowest, getRec, normalise, suggestion } from "../../src/utils/getRecommendation";
+
+import { Blissey, Cloyster, Dragonite, Gardevoir, Squirtle } from "../mockups/pokemon";
+
+describe("normalise", () => {
+    it("returns correctly normalised counts", () => {
+        const sampleStats: Record<string, number> = { fire: 1, water: 0, grass: 5 };
+        const expected: Record<string, number> = { fire: 1 / 6, water: 0 / 6, grass: 5 / 6 };
+        expect(normalise(sampleStats, 6)).toEqual(expected);
+    })
+})
+
+describe("findLowest", () => {
+    it("returns all lowest stat Pokemon", () => {
+        let sampleTeam: Pokemon[] = [Blissey, Cloyster, Squirtle, Gardevoir, Dragonite];
+        let expected: Pokemon[] = [Blissey];
+        expect(findLowest(sampleTeam, 1)).toEqual(expected);
+
+        sampleTeam = [Cloyster, Squirtle, Gardevoir, Dragonite];
+        expected = [Squirtle, Gardevoir];
+        expect(findLowest(sampleTeam, 2)).toEqual(expected);
+    })
+})
+
+describe("suggestion", () => {
+    it("returns correct suggestion", () => {
+        let sampleRoles: Record<string, Pokemon[]> = { physicalAttacker: [Dragonite] };
+        let expected: string = "Too much physical attackers. Consider removing Dragonite";
+        expect(suggestion(sampleRoles, "physicalAttacker", 1, "physical attackers")).toEqual(expected);
+
+        sampleRoles = { physicalDefender: [Gardevoir, Squirtle] };
+        expected = "Too much physical defenders. Consider removing Gardevoir or Squirtle";
+        expect(suggestion(sampleRoles, "physicalDefender", 2, "physical defenders")).toEqual(expected);
+    })
+})
+
+describe("getRec", () => {
+    it("returns correct recommendations", () => {
+        let sampleStats: Record<string, number> = { fire: 1, water: 0, grass: 5 };
+        let sampleRoles: Record<string, number> = {
+            physicalAttacker: 1,
+            specialAttacker: 1,
+            physicalDefender: 1,
+            specialDefender: 1
+        };
+        let sampleRoleDist: Record<string, Pokemon[]> = {
+            physicalAttacker: [Dragonite],
+            specialAttacker: [Gardevoir],
+            physicalDefender: [Cloyster],
+            specialDefender: [Blissey],
+        };
+        let expected: string[] = ["Major weakness: Grass"];
+        expect(getRec(sampleStats, sampleRoles, 6, sampleRoleDist)).toEqual(expected);
+
+        sampleStats = { psychic: 1, fairy: 0 };
+        sampleRoles = {
+            physicalAttacker: 0,
+            specialAttacker: 1,
+            physicalDefender: 0,
+            specialDefender: 0
+        };
+        sampleRoleDist = {
+            physicalAttacker: [Dragonite],
+            specialAttacker: [Gardevoir],
+            physicalDefender: [],
+            specialDefender: [],
+        };
+        expected = [
+            "Major weakness: Psychic",
+            "Too few physical attackers.",
+            "Too much special attackers. Consider removing Gardevoir",
+            "Too few physical defenders.",
+            "Too few special defenders."
+        ];
+        expect(getRec(sampleStats, sampleRoles, 2, sampleRoleDist)).toEqual(expected);
+    })
+})

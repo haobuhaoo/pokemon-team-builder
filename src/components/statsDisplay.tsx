@@ -7,7 +7,7 @@ type Props = {
     stats: Stats[];
 }
 
-const Metrics = ["HP", "Attack", "Defence", "Speed", "Sp. Def", "Sp. Atk"];
+const Metrics = ["HP", "Attack", "Defense", "Speed", "Sp. Def", "Sp. Atk"];
 
 /**
  * Renders a radar chart of the Pokémon's base stats.
