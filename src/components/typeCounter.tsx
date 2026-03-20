@@ -1,53 +1,21 @@
-import { useEffect, useState } from "react";
 import { Box, Card, CardContent, Grid, Tooltip, Typography } from "@mui/material";
 
 import type { Pokemon } from "../entities/pokemon";
+import type { TypeAnalysis } from "../entities/types";
 
+import TooltipType from "./tooltipType";
 import TypeDisplay from "./typeDisplay";
-import { AllTypes } from "../entities/types";
-import { calcTeamTypeSplit, type TypeAnalysis } from "../utils/typeCoverage";
+
+import { setColor } from "../utils/typeColor";
 
 type Props = {
     purpose: "strong" | "weak";
     team: Pokemon[];
+    statistics: Record<string, TypeAnalysis>;
 }
 
-const TypeCounter: React.FC<Props> = ({ purpose, team }) => {
-    const [analysis, setAnalysis] = useState({});
-
-    const emptyTeamCounter = () => {
-        const allTypes: Record<string, TypeAnalysis> = {};
-        AllTypes.forEach(t => allTypes[t] = {
-            defenseScore: 0,
-            coverageCount: 0,
-            weakPokemon: [],
-            resistPokemon: [],
-            immunePokemon: [],
-            coveragePokemon: [],
-        });
-        return allTypes;
-    };
-
-    const setColor = (value: number): string => {
-        const red = "#ff2020";
-        const green = "#00d03b";
-        const black = "#000";
-        const normalised = value / team.length;
-        if (purpose === "strong") {
-            if (normalised >= 0.5) return green;
-            else if (normalised > 0) return black;
-            else return red;
-        } else {
-            if (normalised >= 0.2) return red;
-            else if (normalised > -0.2) return black;
-            else return green;
-        }
-    };
-
-    useEffect(() => {
-        if (team.length === 0) setAnalysis(emptyTeamCounter())
-        else setAnalysis(calcTeamTypeSplit(team));
-    }, [team]);
+const TypeCounter: React.FC<Props> = ({ purpose, team, statistics }) => {
+    const isStrong = purpose === "strong";
 
     return (
         <Card
@@ -74,53 +42,19 @@ const TypeCounter: React.FC<Props> = ({ purpose, team }) => {
                         fontWeight: "bold",
                         fontSize: "20px"
                     }}>
-                    {purpose == "strong" ? "Coverage" : "Weakness"}
+                    {isStrong ? "Coverage" : "Weakness"}
                 </Typography>
 
                 <Grid container spacing={2}>
-                    {(Object.entries(analysis) as [string, TypeAnalysis][]).map(([type, value]) => (
+                    {(Object.entries(statistics) as [string, TypeAnalysis][]).map(([type, value]) => (
                         <Grid key={type} size={4}>
                             <Tooltip
                                 title={
-                                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                        {purpose === "strong"
-                                            ? <Typography
-                                                gutterBottom
-                                                variant="body2"
-                                                sx={{ textTransform: "capitalize" }}>
-                                                Super Effective: {value.coveragePokemon.join(", ") || "None"}
-                                            </Typography>
-                                            : <>
-                                                <Typography
-                                                    gutterBottom
-                                                    sx={{
-                                                        fontSize: "16px",
-                                                        fontWeight: "bold",
-                                                        color: "white"
-                                                    }}>
-                                                    {type}
-                                                </Typography>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="body2"
-                                                    sx={{ textTransform: "capitalize" }}>
-                                                    Weak: {value.weakPokemon.join(", ") || "None"}
-                                                </Typography>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="body2"
-                                                    sx={{ textTransform: "capitalize" }}>
-                                                    Resist: {value.resistPokemon.join(", ") || "None"}
-                                                </Typography>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="body2"
-                                                    sx={{ textTransform: "capitalize" }}>
-                                                    Immune: {value.immunePokemon.join(", ") || "None"}
-                                                </Typography>
-                                            </>
-                                        }
-                                    </Box>
+                                    <TooltipType
+                                        isStrong={isStrong}
+                                        type={type}
+                                        value={value}
+                                    />
                                 }
                                 arrow
                                 placement="top">
@@ -141,11 +75,9 @@ const TypeCounter: React.FC<Props> = ({ purpose, team }) => {
                                             justifyContent: "center",
                                             fontSize: "16px",
                                             fontWeight: "bold",
-                                            color: setColor(purpose === "strong"
-                                                ? value.coverageCount
-                                                : value.defenseScore)
+                                            color: setColor(team.length, isStrong, value)
                                         }}>
-                                        {purpose === "strong" ? value.coverageCount : value.defenseScore}
+                                        {isStrong ? value.coverageCount : value.defenseScore}
                                     </Typography>
                                 </Box>
                             </Tooltip>

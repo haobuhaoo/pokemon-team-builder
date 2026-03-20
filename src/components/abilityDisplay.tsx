@@ -7,25 +7,19 @@ type Props = {
 }
 
 const AbilityDisplay: React.FC<Props> = ({ ability }) => {
-    let count = 0;
-    const display = (ability: Abilities) => {
-        count++;
-        return (
-            <Typography
-                key={count}
-                sx={{
-                    whiteSpace: "normal",
-                    wordBreak: "break-word",
-                    textTransform: "capitalize"
-                }}>
-                {count + ". " + ability.ability.name + (ability.is_hidden ? " (hidden)" : "")}
-            </Typography>
-        )
-    };
-
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {ability?.map(a => display(a))}
+            {ability?.map((ability, index) => (
+                <Typography
+                    key={index + 1}
+                    sx={{
+                        whiteSpace: "normal",
+                        wordBreak: "break-word",
+                        textTransform: "capitalize"
+                    }}>
+                    {(index + 1) + ". " + ability.ability.name + (ability.is_hidden ? " (hidden)" : "")}
+                </Typography>
+            ))}
         </Box>
     )
 }

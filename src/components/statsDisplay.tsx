@@ -7,18 +7,14 @@ type Props = {
     stats: Stats[];
 }
 
-const StatsDisplay: React.FC<Props> = ({ stats }) => {
-    let firstThree = [];
-    let lastThree = [];
-    for (let i = 0; i < 3; i++) {
-        firstThree.push(stats[i].base_stat);
-        lastThree.push(stats[i + 3].base_stat);
-    }
-    const combinedStats = firstThree.concat(lastThree.reverse());
-    const total = combinedStats.reduce((sum, val) => sum + val, 0);
+const Metrics = ["HP", "Attack", "Defense", "Speed", "Sp. Def", "Sp. Atk"];
 
-    const metrics = ["HP", "Attack", "Defense", "Speed", "Sp. Def", "Sp. Atk"];
-    const metricsWithValues = metrics.map((label, i) => `${label}\n${combinedStats[i]}`);
+const StatsDisplay: React.FC<Props> = ({ stats }) => {
+    const firstThree = stats.slice(0, 3).map(s => s.base_stat);
+    const lastThree = stats.slice(3, 6).map(s => s.base_stat).reverse();
+    const combinedStats = firstThree.concat(lastThree);
+    const total = combinedStats.reduce((sum, val) => sum + val, 0);
+    const metricsWithValues = Metrics.map((label, i) => `${label}\n${combinedStats[i]}`);
 
     return (
         <Box sx={{ width: "90%" }}>

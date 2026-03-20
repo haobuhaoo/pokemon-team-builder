@@ -1,15 +1,6 @@
 import type { Pokemon } from "../entities/pokemon";
 
-import { TypeChart } from "../entities/types";
-
-export interface TypeAnalysis {
-    defenseScore: number;
-    coverageCount: number;
-    weakPokemon: string[];
-    resistPokemon: string[];
-    immunePokemon: string[];
-    coveragePokemon: string[];
-}
+import { TypeChart, type TypeAnalysis } from "../entities/types";
 
 export function calcTeamTypeSplit(team: Pokemon[]) {
     const scores: Record<string, TypeAnalysis> = {};
@@ -65,8 +56,15 @@ export function calcTeamTypeSplit(team: Pokemon[]) {
             weakPokemon,
             resistPokemon,
             immunePokemon,
-            coveragePokemon };
+            coveragePokemon
+        };
     }
 
     return scores;
+}
+
+export function unpackStats(statistics: Record<string, TypeAnalysis>): Record<string, number> {
+    const result: Record<string, number> = {};
+    Object.entries(statistics).forEach(([type, value]) => result[type] = value.weakPokemon.length);
+    return result;
 }

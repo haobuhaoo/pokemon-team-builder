@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Box, Typography } from "@mui/material";
 
 import type { Pokemon, PokemonList } from "./entities/pokemon"
@@ -11,26 +11,20 @@ import { fetchAllPokemon } from "./services/fetchPokemon"
 const App: React.FC = () => {
     const [allPokemon, setAllPokemon] = useState<PokemonList[]>([]);
     const [team, setTeam] = useState<(Pokemon | null)[]>(Array(6).fill(null));
+    const teamSize = useMemo(() => team.filter(p => p !== null).length, [team]);
+    const pkmOnlyTeam = useMemo(() => team.filter(p => p !== null) as Pokemon[], [team]);
 
-    const teamSize = (team: (Pokemon | null)[]): number => {
-        return team?.filter(p => p !== null).length;
-    };
-
-    const handleAddPokemon = (index: number, pkm: Pokemon): void => {
-        if (teamSize(team) > 6) return;
-
+    const handleAddPokemon = useCallback((index: number, pkm: Pokemon): void => {
         const newTeam = [...team];
         newTeam[index] = pkm;
         setTeam(newTeam);
-    };
+    }, [team]);
 
-    const handleRemovePokemon = (index: number): void => {
-        if (teamSize(team) < 0) return;
-
+    const handleRemovePokemon = useCallback((index: number): void => {
         const newTeam = [...team];
         newTeam[index] = null;
         setTeam(newTeam);
-    }
+    }, [team]);
 
     useEffect(() => {
         fetchAllPokemon(setAllPokemon);
@@ -59,7 +53,7 @@ const App: React.FC = () => {
                     justifyContent: "center",
                     display: "flex",
                 }}>
-                My Team ({teamSize(team)}/6)
+                My Team ({teamSize}/6)
             </Typography>
 
             <div style={{ display: "flex", justifyContent: "center", gap: "28px", width: "100%" }}>
@@ -72,7 +66,7 @@ const App: React.FC = () => {
                 </Box>
 
                 <Box sx={{ width: "30%" }}>
-                    <Coverage team={team} />
+                    <Coverage team={pkmOnlyTeam} />
                 </Box>
             </div>
         </div>

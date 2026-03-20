@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Autocomplete, TextField, Box, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -17,7 +17,13 @@ const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, addPokemon, re
     const [inputValue, setInputValue] = useState<string>("");
     const [selectedPokemon, setSelectedPokemon] = useState<PokemonList | null>(null);
 
-    const handleAddPokemon = (pokemon: typeof allPokemon[number]) => {
+    const filteredOptions = useMemo(() => {
+        return allPokemon
+            .filter((opt) => opt.name.toLowerCase().includes(inputValue.toLowerCase()))
+            .slice(0, 20);
+    }, [allPokemon, inputValue]);
+
+    const handleAddPokemon = useCallback((pokemon: PokemonList) => {
         fetchByUrl(pokemon.url).then(res => {
             if (res) {
                 setPokemon(res);
@@ -25,20 +31,20 @@ const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, addPokemon, re
                 addPokemon(res);
             }
         });
-    };
+    }, [addPokemon, setPokemon]);
 
-    const handleRemovePokemon = () => {
+    const handleRemovePokemon = useCallback(() => {
         setPokemon(null);
         setSelectedPokemon(null);
         setInputValue("");
         removePokemon();
-    };
+    }, [removePokemon, setPokemon]);
 
     return (
         <Box sx={{ display: "flex", width: "100%", height: "100%" }}>
             <Box sx={{ width: "100%", ml: 2, mr: 4.5, mt: 1 }}>
                 <Autocomplete
-                    options={allPokemon}
+                    options={filteredOptions}
                     getOptionLabel={(option) => option.name}
                     value={selectedPokemon}
                     inputValue={inputValue}
@@ -49,11 +55,6 @@ const SearchPokemon: React.FC<Props> = ({ allPokemon, setPokemon, addPokemon, re
                         setSelectedPokemon(value);
                         if (value) handleAddPokemon(value);
                     }}
-                    filterOptions={(options) =>
-                        options.filter((opt) =>
-                            opt.name.toLowerCase().includes(inputValue.toLowerCase())
-                        ).slice(0, 20)
-                    }
                     renderOption={(props, option) => {
                         const { key, ...otherProps } = props
                         return (<li key={key} {...otherProps}>
