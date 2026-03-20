@@ -1,39 +1,30 @@
-import { useEffect, useState, type JSX } from "react";
+import { type JSX } from "react";
 import { Box, Card, CardContent, Divider, Tooltip, Typography } from "@mui/material";
 
 import type { Pokemon } from "../entities/pokemon";
 
-import { calcTeamRoleDistribution } from "../utils/roleDistribution";
-
 type Props = {
-    team: Pokemon[];
+    rolesDist: Record<string, Pokemon[]>;
 }
 
-const RoleCounter: React.FC<Props> = ({ team }) => {
-    const [roles, setRoles] = useState<Record<string, Pokemon[]>>({
-        physicalAttacker: [],
-        specialAttacker: [],
-        physicalDefender: [],
-        specialDefender: [],
-    });
+const Role = {
+    "Physical Attacker": "physicalAttacker",
+    "Special Attacker": "specialAttacker",
+    "Physical Defender": "physicalDefender",
+    "Special Defender": "specialDefender",
+}
 
-    const role = {
-        "Physical Attacker": "physicalAttacker",
-        "Special Attacker": "specialAttacker",
-        "Physical Defender": "physicalDefender",
-        "Special Defender": "specialDefender",
-    }
-
+const RoleCounter: React.FC<Props> = ({ rolesDist }) => {
     const displayRoles = (title: string, role: string): JSX.Element => {
         return (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <Box key={title} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 <Divider sx={{ mx: "2px", mt: "4px" }} />
                 <Box sx={{ display: "flex" }}>
                     <Typography
                         sx={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
+                            justifyContent: "left",
                             width: "30%",
                             textTransform: "capitalize"
                         }}>
@@ -47,8 +38,9 @@ const RoleCounter: React.FC<Props> = ({ team }) => {
                             flexWrap: "wrap",
                             width: "70%"
                         }}>
-                        {roles[role].map(p => (
+                        {rolesDist[role].map(p => (
                             <Tooltip
+                                key={p.id}
                                 title={
                                     <Typography
                                         sx={{
@@ -62,7 +54,6 @@ const RoleCounter: React.FC<Props> = ({ team }) => {
                                 arrow
                                 placement="top">
                                 <img
-                                    key={p.id}
                                     src={p.sprites.front_default}
                                     alt={p.name}
                                     width={"30%"}
@@ -74,10 +65,6 @@ const RoleCounter: React.FC<Props> = ({ team }) => {
             </Box>
         )
     };
-
-    useEffect(() => {
-        setRoles(calcTeamRoleDistribution(team));
-    }, [team]);
 
     return (
         <Card
@@ -94,7 +81,6 @@ const RoleCounter: React.FC<Props> = ({ team }) => {
                     flexDirection: "column",
                 }}>
                 <Typography
-
                     sx={{
                         display: "flex",
                         justifyContent: "center",
@@ -105,7 +91,7 @@ const RoleCounter: React.FC<Props> = ({ team }) => {
                     Distribution
                 </Typography>
 
-                {Object.entries(role).map(([t, r]) => (
+                {Object.entries(Role).map(([t, r]) => (
                     displayRoles(t, r)
                 ))}
             </CardContent>

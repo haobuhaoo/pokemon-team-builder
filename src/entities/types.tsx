@@ -108,3 +108,11 @@ export const TypeChart: Record<string, Record<string, number>> = {
         dragon: 0,
     },
 }
+export interface TypeAnalysis {
+    defenseScore: number;
+    coverageCount: number;
+    weakPokemon: string[];
+    resistPokemon: string[];
+    immunePokemon: string[];
+    coveragePokemon: string[];
+}
