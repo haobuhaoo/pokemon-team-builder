@@ -96,6 +96,24 @@ export const Dragonite: Pokemon = {
     ]
 };
 
+export const Mew: Pokemon = {
+    id: 151,
+    name: "mew",
+    sprites: { front_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png" },
+    types: [{ type: { name: "psychic" } }],
+    abilities: [
+        { ability: { name: "synchronize" }, is_hidden: false }
+    ],
+    stats: [
+        { base_stat: 100, stat: { name: "hp" } },
+        { base_stat: 100, stat: { name: "attack" } },
+        { base_stat: 100, stat: { name: "defense" } },
+        { base_stat: 100, stat: { name: "special-attack" } },
+        { base_stat: 100, stat: { name: "special-defense" } },
+        { base_stat: 100, stat: { name: "speed" } }
+    ]
+};
+
 export const Blissey: Pokemon = {
     id: 242,
     name: "blissey",

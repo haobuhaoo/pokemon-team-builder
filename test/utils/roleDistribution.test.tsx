@@ -2,9 +2,9 @@ import type { Pokemon } from "../../src/entities/pokemon";
 
 import { calcTeamRoleDistribution, unpackRoles } from "../../src/utils/roleDistribution";
 
-import { Blissey, Cloyster, Dragonite, Gardevoir } from "../mockups/pokemon";
+import { Blissey, Cloyster, Dragonite, Gardevoir, Mew } from "../mockups/pokemon";
 
-const sampleTeam: Pokemon[] = [Cloyster, Dragonite, Blissey, Gardevoir];
+const sampleTeam: Pokemon[] = [Cloyster, Dragonite, Blissey, Gardevoir, Mew];
 
 describe("calcTeamRoleDistribution", () => {
     it("categorizes Pokémon into roles", () => {
@@ -19,6 +19,9 @@ describe("calcTeamRoleDistribution", () => {
         expect(roles.physicalDefender.length).toEqual(1);
 
         expect(roles).toHaveProperty("specialDefender");
+        expect(roles.specialDefender.length).toEqual(1);
+
+        expect(roles).toHaveProperty("balance");
         expect(roles.specialDefender.length).toEqual(1);
     })
 })

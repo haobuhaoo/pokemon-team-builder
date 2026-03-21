@@ -2,7 +2,7 @@ import type { Pokemon } from "../../src/entities/pokemon";
 
 import { findLowest, getRec, normalise, suggestion } from "../../src/utils/getRecommendation";
 
-import { Blissey, Cloyster, Dragonite, Gardevoir, Squirtle } from "../mockups/pokemon";
+import { Blissey, Cloyster, Dragonite, Gardevoir, Mew, Squirtle } from "../mockups/pokemon";
 
 describe("normalise", () => {
     it("returns correctly normalised counts", () => {
@@ -37,43 +37,73 @@ describe("suggestion", () => {
 })
 
 describe("getRec", () => {
-    it("returns correct recommendations", () => {
-        let sampleStats: Record<string, number> = { fire: 1, water: 0, grass: 5 };
-        let sampleRoles: Record<string, number> = {
-            physicalAttacker: 1,
-            specialAttacker: 1,
-            physicalDefender: 1,
-            specialDefender: 1
-        };
-        let sampleRoleDist: Record<string, Pokemon[]> = {
-            physicalAttacker: [Dragonite],
-            specialAttacker: [Gardevoir],
-            physicalDefender: [Cloyster],
-            specialDefender: [Blissey],
-        };
-        let expected: string[] = ["Major weakness: Grass"];
-        expect(getRec(sampleStats, sampleRoles, 6, sampleRoleDist)).toEqual(expected);
+    describe("returns correct recommendations for", () => {
+        it("balanced team", () => {
+            const sampleStats: Record<string, number> = { fire: 1, water: 0, grass: 5 };
+            const sampleRoles: Record<string, number> = {
+                physicalAttacker: 1,
+                specialAttacker: 1,
+                physicalDefender: 1,
+                specialDefender: 1,
+                balance: 1
+            };
+            const sampleRoleDist: Record<string, Pokemon[]> = {
+                physicalAttacker: [Dragonite],
+                specialAttacker: [Gardevoir],
+                physicalDefender: [Cloyster],
+                specialDefender: [Blissey],
+                balance: [Mew]
+            };
+            const expected: string[] = ["Major weakness: Grass"];
+            expect(getRec(sampleStats, sampleRoles, 6, sampleRoleDist)).toEqual(expected);
+        })
 
-        sampleStats = { psychic: 1, fairy: 0 };
-        sampleRoles = {
-            physicalAttacker: 0,
-            specialAttacker: 1,
-            physicalDefender: 0,
-            specialDefender: 0
-        };
-        sampleRoleDist = {
-            physicalAttacker: [Dragonite],
-            specialAttacker: [Gardevoir],
-            physicalDefender: [],
-            specialDefender: [],
-        };
-        expected = [
-            "Major weakness: Psychic",
-            "Too few physical attackers.",
-            "Too much special attackers. Consider removing Gardevoir",
-            "Too few physical defenders.",
-            "Too few special defenders."
-        ];
-        expect(getRec(sampleStats, sampleRoles, 2, sampleRoleDist)).toEqual(expected);
+        it("missing roles", () => {
+            const sampleStats: Record<string, number> = { psychic: 1, fairy: 0 };
+            const sampleRoles: Record<string, number> = {
+                physicalAttacker: 1,
+                specialAttacker: 1,
+                physicalDefender: 0,
+                specialDefender: 0,
+                balance: 0
+            };
+            const sampleRoleDist: Record<string, Pokemon[]> = {
+                physicalAttacker: [Dragonite],
+                specialAttacker: [Gardevoir],
+                physicalDefender: [],
+                specialDefender: [],
+                balance: []
+            };
+            const expected: string[] = [
+                "Major weakness: Psychic",
+                "Too much physical attackers. Consider removing Dragonite",
+                "Too much special attackers. Consider removing Gardevoir",
+                "Too few physical defenders.",
+                "Too few special defenders."
+            ];
+            expect(getRec(sampleStats, sampleRoles, 2, sampleRoleDist)).toEqual(expected);
+        })
+
+        it("missing roles but with balance Pokemon", () => {
+            const sampleStats: Record<string, number> = { fire: 1, water: 0 };
+            const sampleRoles: Record<string, number> = {
+                physicalAttacker: 0,
+                specialAttacker: 0,
+                physicalDefender: 0,
+                specialDefender: 0,
+                balance: 1
+            };
+            const sampleRoleDist: Record<string, Pokemon[]> = {
+                physicalAttacker: [],
+                specialAttacker: [],
+                physicalDefender: [],
+                specialDefender: [],
+                balance: [Mew]
+            };
+            const expected: string[] = [
+                "Major weakness: Fire",
+            ];
+            expect(getRec(sampleStats, sampleRoles, 1, sampleRoleDist)).toEqual(expected);
+        })
     })
 })
