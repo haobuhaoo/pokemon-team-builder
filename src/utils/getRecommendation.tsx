@@ -47,10 +47,6 @@ export function suggestion(
 
 /**
  * Generates a list of recommendations for improving a Pokémon team composition.
- *
- * Recommendations include:
- * - Identifying major type weaknesses.
- * - Highlighting underrepresented or overrepresented roles.
  */
 export function getRec(
     statBreakdown: Record<string, number>,
@@ -65,28 +61,28 @@ export function getRec(
     if (weak.length > 0) rec.push("Major weakness: " + weak.join(", "));
 
     const roles = normalise(roleBreakdown, teamSize);
-    if ((roles["physicalAttacker"]) < 0.15) {
+    if ((roles["physicalAttacker"]) < 0.15 && roles["balance"] < 0.15) {
         rec.push("Too few physical attackers.");
     }
     if ((roles["physicalAttacker"]) >= 0.50) {
         rec.push(suggestion(rolesDist, "physicalAttacker", 1, "physical attackers"));
     }
 
-    if ((roles["specialAttacker"]) < 0.15) {
+    if ((roles["specialAttacker"]) < 0.15 && roles["balance"] < 0.15) {
         rec.push("Too few special attackers.");
     }
     if ((roles["specialAttacker"]) >= 0.50) {
         rec.push(suggestion(rolesDist, "specialAttacker", 3, "special attackers"));
     }
 
-    if ((roles["physicalDefender"]) < 0.15) {
+    if ((roles["physicalDefender"]) < 0.15 && roles["balance"] < 0.15) {
         rec.push("Too few physical defenders.");
     }
     if ((roles["physicalDefender"]) >= 0.50) {
         rec.push(suggestion(rolesDist, "physicalDefender", 2, "physical defenders"));
     }
 
-    if ((roles["specialDefender"]) < 0.15) {
+    if ((roles["specialDefender"]) < 0.15 && roles["balance"] < 0.15) {
         rec.push("Too few special defenders.");
     }
     if ((roles["specialDefender"]) >= 0.50) {

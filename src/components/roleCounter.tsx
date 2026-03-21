@@ -12,6 +12,7 @@ const Role = {
     "Special Attacker": "specialAttacker",
     "Physical Defender": "physicalDefender",
     "Special Defender": "specialDefender",
+    "Balanced": "balance"
 }
 
 /**

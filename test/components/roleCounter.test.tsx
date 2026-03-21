@@ -9,6 +9,7 @@ const rolesDist = {
     specialAttacker: [],
     physicalDefender: [],
     specialDefender: [],
+    balance: []
 };
 
 describe("RoleCounter", () => {
@@ -19,6 +20,7 @@ describe("RoleCounter", () => {
         expect(screen.getByText("Special Attacker:")).toBeInTheDocument();
         expect(screen.getByText("Physical Defender:")).toBeInTheDocument();
         expect(screen.getByText("Special Defender:")).toBeInTheDocument();
+        expect(screen.getByText("Balanced:")).toBeInTheDocument();
     })
 
     it("renders Pokemon images for roles with Pokemon", () => {

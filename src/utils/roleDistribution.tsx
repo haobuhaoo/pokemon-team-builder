@@ -9,18 +9,51 @@ export function calcTeamRoleDistribution(team: Pokemon[]): Record<string, Pokemo
         specialAttacker: [],
         physicalDefender: [],
         specialDefender: [],
+        balance: []
     };
 
     for (const pkm of team) {
+        const hp = pkm.stats[0].base_stat;
         const atk = pkm.stats[1].base_stat;
         const def = pkm.stats[2].base_stat;
         const satk = pkm.stats[3].base_stat;
         const sdef = pkm.stats[4].base_stat;
+        const spd = pkm.stats[5].base_stat;
 
-        if (atk >= 110 && atk > satk) result["physicalAttacker"].push(pkm);
-        if (satk >= 110 && satk > atk) result["specialAttacker"].push(pkm);
-        if (def >= 130 && atk < 100 && satk < 100) result["physicalDefender"].push(pkm);
-        if (sdef >= 130 && atk < 100 && satk < 100) result["specialDefender"].push(pkm);
+        const phyOff = atk * 0.7 + spd * 0.3;
+        const speOff = satk * 0.7 + spd * 0.3;
+        const phyDef = def * 0.5 + hp * 0.5;
+        const speDef = sdef * 0.5 + hp * 0.5;
+
+        const arr = [phyOff, speOff, phyDef, speDef].map(x => Math.exp(x));
+        const sum = arr.reduce((s, v) => s + v, 0);
+        const probability = arr.map(x => x / sum);
+
+        let max: number = -Infinity;
+        let idx: number[] = [];
+        for (let i: number = 0; i < probability.length; i++) {
+            if (probability[i] > max) {
+                max = probability[i];
+                idx = [i];
+            } else if (probability[i] === max) {
+                idx.push(i);
+            }
+        }
+
+        if (idx.length !== 1) {
+            result["balance"].push(pkm);
+            continue;
+        };
+
+        let role = "";
+        switch (idx[0]) {
+            case 0: role = "physicalAttacker"; break;
+            case 1: role = "specialAttacker"; break;
+            case 2: role = "physicalDefender"; break;
+            case 3: role = "specialDefender"; break;
+        }
+
+        result[role].push(pkm);
     }
     return result;
 }
